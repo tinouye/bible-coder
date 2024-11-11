@@ -9,6 +9,8 @@ async function importFileAsync(): Promise<string> {
     try {
       const data = await fs.readFile('text/kjvBible.txt', { encoding: 'utf8' });
       console.log("waiting");
+      console.log(data.slice(11,30))
+      console.log("waiting2")
       
       return data
     } catch (err) {
@@ -17,14 +19,46 @@ async function importFileAsync(): Promise<string> {
     }
 }
 
-async function doOtherStuff() {
-    const data = await importFileAsync();
-    console.log("outside flag");
-    console.log(data.slice(1,10));
+function findStringPatterns(text:string, query:string) {
+    // Iterate through entire text
+    for (let i: number = 0; i < text.length; i++) {
+        // Search for starting letter of query
+        if (text[i] == query[0]) {
+            // Search for the second letter at distance j from header
+            for (let j: number = 1; j < 11; j++) {
+                // Hop j letters k times to see if the query can be found
+                for (let k: number = 1; k < query.length; k++) {
+                    if (!(text[i+(j*k)] == query[k])) {
+                        break
+                    }
+                    if (k == query.length-1) {
+                        console.log(i);
+                        console.log(text.slice(i, i+(j*k)+100))
+                        let indicatorArr: Array<string> = []
+                        for (let count: number = 0; count <= j*k; count++) {
+                            if (count%j == 0) {
+                                indicatorArr.push("^");
+                            }
+                            else {
+                                indicatorArr.push("_");
+                            }
+                        }
+                        console.log(indicatorArr.join(""));
+                    }
+                }
+            }
+        }
+    }
 }
 
-doOtherStuff()
-console.log("interiim");
+async function main() {
+    const data = await importFileAsync();
+    findStringPatterns(data, "inheritance");
+
+}
+
+main()
+console.log("interrim");
 
 
 

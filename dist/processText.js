@@ -16,6 +16,8 @@ function importFileAsync() {
         try {
             const data = yield fs.readFile('text/kjvBible.txt', { encoding: 'utf8' });
             console.log("waiting");
+            console.log(data.slice(11, 30));
+            console.log("waiting2");
             return data;
         }
         catch (err) {
@@ -24,15 +26,45 @@ function importFileAsync() {
         }
     });
 }
-function doOtherStuff() {
+function findStringPatterns(text, query) {
+    // Iterate through entire text
+    for (let i = 0; i < text.length; i++) {
+        // Search for starting letter of query
+        if (text[i] == query[0]) {
+            // Search for the second letter at distance j from header
+            for (let j = 1; j < 11; j++) {
+                // Hop j letters k times to see if the query can be found
+                for (let k = 1; k < query.length; k++) {
+                    if (!(text[i + (j * k)] == query[k])) {
+                        break;
+                    }
+                    if (k == query.length - 1) {
+                        console.log(i);
+                        console.log(text.slice(i, i + (j * k) + 100));
+                        let indicatorArr = [];
+                        for (let count = 0; count <= j * k; count++) {
+                            if (count % j == 0) {
+                                indicatorArr.push("^");
+                            }
+                            else {
+                                indicatorArr.push("_");
+                            }
+                        }
+                        console.log(indicatorArr.join(""));
+                    }
+                }
+            }
+        }
+    }
+}
+function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const data = yield importFileAsync();
-        console.log("outside flag");
-        console.log(data.slice(1, 10));
+        findStringPatterns(data, "inheritance");
     });
 }
-doOtherStuff();
-console.log("interiim");
+main();
+console.log("interrim");
 /*
 async function processReadStream(readStream, textArr): Promise<String[]> {
     let flag = 0
