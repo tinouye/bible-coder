@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const readline = require('readline');
+const promptConsole = require('prompt-sync')();
 
 let textArr: String[] = [];
 let textArrPromise = Promise<String[]>
@@ -13,9 +14,11 @@ async function importFileAsync(): Promise<string> {
       console.log("waiting2")
       
       return data
+
     } catch (err) {
       console.log(err);
       console.log("oops");
+      return "File read error";
     }
 }
 
@@ -53,12 +56,16 @@ function findStringPatterns(text:string, query:string) {
 
 async function main() {
     const data = await importFileAsync();
-    findStringPatterns(data, "inheritance");
-
+    let query: string = "";
+    while (query != "quit") {
+        query = promptConsole("Enter query (quit to exit): ");
+        if (query != "quit") {
+            findStringPatterns(data, query);
+        }
+    }
 }
 
 main()
-console.log("interrim");
 
 
 

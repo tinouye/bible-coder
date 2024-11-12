@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const fs = require('fs/promises');
 const readline = require('readline');
+const promptConsole = require('prompt-sync')();
 let textArr = [];
 let textArrPromise = (Promise);
 function importFileAsync() {
@@ -23,6 +24,7 @@ function importFileAsync() {
         catch (err) {
             console.log(err);
             console.log("oops");
+            return "File read error";
         }
     });
 }
@@ -60,11 +62,16 @@ function findStringPatterns(text, query) {
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const data = yield importFileAsync();
-        findStringPatterns(data, "inheritance");
+        let query = "";
+        while (query != "quit") {
+            query = promptConsole("Enter query (quit to exit): ");
+            if (query != "quit") {
+                findStringPatterns(data, query);
+            }
+        }
     });
 }
 main();
-console.log("interrim");
 /*
 async function processReadStream(readStream, textArr): Promise<String[]> {
     let flag = 0
