@@ -36,17 +36,19 @@ function findStringPatterns(text:string, query:string) {
                     }
                     if (k == query.length-1) {
                         console.log(i);
-                        console.log(text.slice(i, i+(j*k)+100))
+                        
                         let indicatorArr: Array<string> = []
+                        // build string that shows where the letters are
                         for (let count: number = 0; count <= j*k; count++) {
                             if (count%j == 0) {
-                                indicatorArr.push("^");
+                                indicatorArr.push("v");
                             }
                             else {
-                                indicatorArr.push("_");
+                                indicatorArr.push("-");
                             }
                         }
                         console.log(indicatorArr.join(""));
+                        console.log(text.slice(i, i+(j*k)+100))
                     }
                 }
             }
