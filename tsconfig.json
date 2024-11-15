@@ -5,8 +5,34 @@
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["src/**/*"],
-  "lib": ["es2015"]
+  "include": [
+    "src/**/*",
+    ".next/types/**/*.ts"
+  ],
+  "lib": [
+    "es2015"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

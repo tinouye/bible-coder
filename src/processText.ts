@@ -5,6 +5,18 @@ const promptConsole = require('prompt-sync')();
 let textArr: String[] = [];
 let textArrPromise = Promise<String[]>
 
+class CharacterBit {
+    char: string = "";
+    shouldBeCounted: Boolean = false;
+
+    constructor(char:string, shouldBeCounted:boolean) {
+        this.char = char;
+        this.shouldBeCounted = shouldBeCounted;
+    }
+
+
+}
+
 
 async function importFileAsync(): Promise<string> {
     try {
@@ -22,7 +34,28 @@ async function importFileAsync(): Promise<string> {
     }
 }
 
-function findStringPatterns(text:string, query:string) {
+function indexCharacters(text:string) {
+    let characterBitArr: Array<CharacterBit> = [];
+    let validSegment: Boolean = false;
+    let colonFound: Boolean = false;
+
+    for (let i=0; i < text.length; i++) {
+        // If we are currently in a header
+        if (!validSegment) {
+            // If a colon hasn't found in this part of the header yet, advance until it is
+            if (!colonFound) {
+                if (text[i] == ":") {
+                    colonFound = true;
+                }
+            }
+            else {
+
+            }
+        }
+    }
+}
+
+function findStringPatterns(text:string, query:string): Array<string> {
     // Iterate through entire text
     for (let i: number = 0; i < text.length; i++) {
         // Search for starting letter of query
@@ -34,8 +67,8 @@ function findStringPatterns(text:string, query:string) {
                     if (!(text[i+(j*k)] == query[k])) {
                         break
                     }
+                    // Made it to the end of the query so match has been found
                     if (k == query.length-1) {
-                        console.log(i);
                         
                         let indicatorArr: Array<string> = []
                         // build string that shows where the letters are
@@ -47,8 +80,7 @@ function findStringPatterns(text:string, query:string) {
                                 indicatorArr.push("-");
                             }
                         }
-                        console.log(indicatorArr.join(""));
-                        console.log(text.slice(i, i+(j*k)+100))
+                        return [indicatorArr.join(""), text.slice(i, i+(j*k)+100)]
                     }
                 }
             }
@@ -56,18 +88,24 @@ function findStringPatterns(text:string, query:string) {
     }
 }
 
-async function main() {
+async function processText(query: string = "test") {
     const data = await importFileAsync();
-    let query: string = "";
-    while (query != "quit") {
-        query = promptConsole("Enter query (quit to exit): ");
-        if (query != "quit") {
-            findStringPatterns(data, query);
+    let consoleMode: boolean = false;
+    if (consoleMode) {
+        query = "";
+        while (query != "quit") {
+            query = promptConsole("Enter query (quit to exit): ");
+            if (query != "quit") {
+                findStringPatterns(data, query);
+            }
         }
+    }
+    else {
+        return findStringPatterns(data, query);
     }
 }
 
-main()
+console.log(processText());
 
 
 
