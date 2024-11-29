@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.processText = processText;
 const fs = require('fs/promises');
 const readline = require('readline');
 // const promptConsole = require('prompt-sync')();
@@ -104,7 +105,7 @@ function findStringPatterns(text, query) {
                     }
                     // If character is to be hopped over, decrement countdown and move to next char
                     else if (charsBeforeNextCounted > 0) {
-                        indicatorStr += "_";
+                        indicatorStr += ".";
                         charsBeforeNextCounted--;
                     }
                     // Beyond this point we know the current char is valid
@@ -124,7 +125,7 @@ function findStringPatterns(text, query) {
                         // Clamp text sample so it doesn't leave the bounds of the text
                         const sampleStart = Math.max(i - 20, 0);
                         for (let j = 0; j < (i - sampleStart); j++) {
-                            indicatorStr = " " + indicatorStr;
+                            indicatorStr = "o" + indicatorStr;
                         }
                         const sampleEnd = Math.min(nextIndex + 100, text.length);
                         // Build return string from the text array because it isn't natively text
@@ -163,35 +164,7 @@ function processText() {
             console.log(arrayItem[0]);
             console.log(arrayItem[1]);
         });
+        return searchResults;
     });
 }
-processText();
-/*
-async function processReadStream(readStream, textArr): Promise<String[]> {
-    let flag = 0
-    for await (const line of readStream) {
-        console.log(line);
-        textArr.push(line);
-        if (flag % 100 == 0) {
-            console.log(flag);
-        }
-        flag += 1;
-    }
-
-    return textArr;
-}
-
-const fileReadStream = fs.createReadStream(
-    'text/kjvBible1.txt', {encoding: 'utf-8'});
-
-fileReadStream.on('data', function (chunk) {
-    console.log(chunk.toString());
-});
-
-let foo = processReadStream(fileReadStream, textArr);
-
-console.log(foo[0])
-
-console.log("done")
-*/ 
 //# sourceMappingURL=processText.js.map
